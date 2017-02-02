@@ -21,7 +21,8 @@ payload = {
           }
 
 unparsed_getAllUsers = requests.get(baseurl + 'api.php', data=payload)
-print unparsed_getAllUsers.headers
+getAllUsers = json.loads(unparsed_getAllUsers.text)
+print getAllUsers
 
 # getAllUsers = json.loads(unparsed_getAllUsers)
 # print getAllUsers
