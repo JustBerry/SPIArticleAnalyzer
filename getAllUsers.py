@@ -20,7 +20,7 @@ i = 0;
 for revision in allRevisions:
     allUsers.append(revision['user'])
     i+=1
-print list(set(allUsers))[0:1]
+print list(set(allUsers))
 
 # getAllUsers = json.loads(unparsed_getAllUsers)
 # print getAllUsers
