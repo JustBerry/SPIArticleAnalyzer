@@ -29,7 +29,7 @@ payload = {
             'uselang': 'user',
             'prop': 'revisions',
             'titles': articlename,
-            'rvprop': 'user',
+            'rvprop': 'contributors',
             'rvlimit': 'max'
           }
 
