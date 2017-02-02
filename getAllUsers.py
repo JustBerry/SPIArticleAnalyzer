@@ -22,9 +22,11 @@ for revision in allRevisions:
     allUsers.append(revision['user'])
     i+=1
 allUsers = list(set(allUsers))
+allUsers.sort()
+
 print "All users..."
 print allUsers
-print ""
+print
 
 # Helper function: Validate IPv4 address
 def is_valid_ipv4_address(address):
@@ -56,6 +58,7 @@ allIPaddresses = [];
 for user in allUsers:
     if (is_valid_ipv4_address(user) or is_valid_ipv6_address(user)):
         allIPaddresses.append(user)
+allIPaddresses.sort()
 
 print "All IP addresses..."
 print allIPaddresses
