@@ -15,7 +15,6 @@ articlename = raw_input('Article to search: ')
 payload = {
             'action': 'query',
             'format': 'json',
-            'utf8': '',
             'uselang': 'user',
             'prop': 'revisions',
             'titles': articlename,
@@ -30,12 +29,12 @@ print unparsed_getAllUsers
 # print getAllUsers
 
 # 1. Requesting login
-# payload = {'action': 'query', 'format': 'json', 'utf8': '', 'meta': 'tokens', 'type': 'login'}
+# payload = {'action': 'query', 'format': 'json', 'meta': 'tokens', 'type': 'login'}
 # r1 = requests.post(baseurl + 'api.php', data=payload)
 
 # 2. Confirming login
 # login_token = r1.json()['query']['tokens']['logintoken']
-# payload = {'action': 'login', 'format': 'json', 'utf8': '', 'lgname': username, 'lgpassword': password, 'lgtoken': login_token}
+# payload = {'action': 'login', 'format': 'json', 'lgname': username, 'lgpassword': password, 'lgtoken': login_token}
 # r2 = requests.post(baseurl + 'api.php', data=payload, cookies=r1.cookies)
 
 # 3. Get editing token
@@ -47,7 +46,7 @@ print unparsed_getAllUsers
 # edit_cookie.update(r3.cookies)
 
 # 4. Saving action
-# payload = {'action': 'edit', 'assert': 'user', 'format': 'json', 'utf8': '', 'appendtext': message,'summary': summary, 'title': title, 'token': edit_token}
+# payload = {'action': 'edit', 'assert': 'user', 'format': 'json', 'appendtext': message,'summary': summary, 'title': title, 'token': edit_token}
 # r4 = requests.post(baseurl + 'api.php', data=payload, cookies=edit_cookie)
 
 # 5. Final output
