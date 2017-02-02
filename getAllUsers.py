@@ -3,26 +3,24 @@ import getpass
 import json
 
 baseurl = 'https://en.wikipedia.beta.wmflabs.org/w/'
-username = 'JustBerry'
-password = getpass.getpass('Account password: ')
+# username = 'JustBerry'
+# password = getpass.getpass('Account password: ')
 articlename = raw_input('Article to search: ')
 # summary = 'bot hello'
 # message = 'Hello Wikipedia. I am alive!'
 # title = 'Sandbox'
 
 # Requesting all userids of users that have edited a particular page.
-# Example/model: action=query&format=json&uselang=user&prop=revisions&titles=User%3AJustBerry&rvprop=user&rvlimit=max
 
-payload = {
-            'action': 'query',
-            'format': 'json',
-            'prop': 'contributors',
-            'titles': articlename,
-          }
-
-unparsed_getAllUsers = requests.get(baseurl + 'api.php', data=payload)
-getAllUsers = json.loads(unparsed_getAllUsers.text)
-print getAllUsers
+requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': articlename, 'rvlimit': 'max'}
+unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
+allRevisions = unparsed_allRevisions.json()['query']['pages']['1']['revisions']
+allUsers = [];
+i = 0;
+for revision in allRevisions:
+    allUsers.append(revision['user'])
+    i+=1
+print list(set(allUsers))[0:1]
 
 # getAllUsers = json.loads(unparsed_getAllUsers)
 # print getAllUsers
