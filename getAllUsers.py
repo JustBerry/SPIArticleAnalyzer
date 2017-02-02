@@ -12,6 +12,7 @@ articlename = raw_input('Article to search: ')
 
 # Requesting all userids of users that have edited a particular page.
 # Example/model: action=query&format=json&uselang=user&prop=revisions&titles=User%3AJustBerry&rvprop=user&rvlimit=max
+
 payload = {
             'action': 'query',
             'format': 'json',
@@ -20,7 +21,7 @@ payload = {
           }
 
 unparsed_getAllUsers = requests.get(baseurl + 'api.php', data=payload)
-print unparsed_getAllUsers
+print unparsed_getAllUsers.headers
 
 # getAllUsers = json.loads(unparsed_getAllUsers)
 # print getAllUsers
