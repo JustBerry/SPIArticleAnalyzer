@@ -1,6 +1,7 @@
 import requests
 import getpass
 import json
+import socket
 
 baseurl = 'https://en.wikipedia.beta.wmflabs.org/w/'
 # username = 'JustBerry'
@@ -20,7 +21,44 @@ i = 0;
 for revision in allRevisions:
     allUsers.append(revision['user'])
     i+=1
-print list(set(allUsers))
+allUsers = list(set(allUsers))
+print "All users..."
+print allUsers
+print ""
+
+# Helper function: Validate IPv4 address
+def is_valid_ipv4_address(address):
+    try:
+        socket.inet_pton(socket.AF_INET, address)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(address)
+        except socket.error:
+            return False
+        return address.count('.') == 3
+    except socket.error:  # not a valid address
+        return False
+
+    return True
+
+# Helper function: Validate IPv6 address
+def is_valid_ipv6_address(address):
+    try:
+        socket.inet_pton(socket.AF_INET6, address)
+    except socket.error:  # not a valid address
+        return False
+    return True
+
+# From list of all users (allUsers) that have edited the specified article (articlename),
+# compile list of valid IP addresses (consisting of IPv4 and IPv6 addresses).
+
+allIPaddresses = [];
+for user in allUsers:
+    if (is_valid_ipv4_address(user) or is_valid_ipv6_address(user)):
+        allIPaddresses.append(user)
+
+print "All IP addresses..."
+print allIPaddresses
 
 # getAllUsers = json.loads(unparsed_getAllUsers)
 # print getAllUsers
