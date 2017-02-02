@@ -15,11 +15,8 @@ articlename = raw_input('Article to search: ')
 payload = {
             'action': 'query',
             'format': 'json',
-            'uselang': 'user',
-            'prop': 'revisions',
+            'prop': 'contributors',
             'titles': articlename,
-            'rvprop': 'contributors',
-            'rvlimit': 'max'
           }
 
 unparsed_getAllUsers = requests.get(baseurl + 'api.php', data=payload)
