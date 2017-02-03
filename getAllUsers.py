@@ -1,91 +1,80 @@
 import requests
-import getpass
 import json
-import socket
+import geoip2.database
+import getpass
 
-baseurl = 'https://en.wikipedia.beta.wmflabs.org/w/'
-# username = 'JustBerry'
-# password = getpass.getpass('Account password: ')
+from IPy import IP
+from getAllUsersHelper import *
+
+# Installation
+# Install pip
+# pip install geoip2
+# Put IPy.py in the same directory
+
+baseurl = 'https://en.wikipedia.org/w/'
 articlename = raw_input('Article to search: ')
-# summary = 'bot hello'
-# message = 'Hello Wikipedia. I am alive!'
-# title = 'Sandbox'
 
-# Requesting all userids of users that have edited a particular page.
+# Requesting all users that have edited a particular page.
 
 requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': articlename, 'rvlimit': 'max'}
 unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
-allRevisions = unparsed_allRevisions.json()['query']['pages']['1']['revisions']
+
+allPages = unparsed_allRevisions.json()['query']['pages']
 allUsers = [];
-i = 0;
-for revision in allRevisions:
-    allUsers.append(revision['user'])
-    i+=1
+for page in allPages:
+    for revision in unparsed_allRevisions.json()['query']['pages'][page]['revisions']:
+        allUsers.append(revision['user'])
+
+# Removing duplicate (non-unique) users
 allUsers = list(set(allUsers))
-allUsers.sort()
-
-print "All users..."
-print allUsers
-print
-
-# Helper function: Validate IPv4 address
-def is_valid_ipv4_address(address):
-    try:
-        socket.inet_pton(socket.AF_INET, address)
-    except AttributeError:  # no inet_pton here, sorry
-        try:
-            socket.inet_aton(address)
-        except socket.error:
-            return False
-        return address.count('.') == 3
-    except socket.error:  # not a valid address
-        return False
-
-    return True
-
-# Helper function: Validate IPv6 address
-def is_valid_ipv6_address(address):
-    try:
-        socket.inet_pton(socket.AF_INET6, address)
-    except socket.error:  # not a valid address
-        return False
-    return True
 
 # From list of all users (allUsers) that have edited the specified article (articlename),
-# compile list of valid IP addresses (consisting of IPv4 and IPv6 addresses).
+# isolate a list of valid IP addresses (consisting of IPv4 and IPv6 addresses).
 
-allIPaddresses = [];
+allIPaddresses = []
 for user in allUsers:
     if (is_valid_ipv4_address(user) or is_valid_ipv6_address(user)):
         allIPaddresses.append(user)
-allIPaddresses.sort()
 
-print "All IP addresses..."
-print allIPaddresses
+allUsers = list(set(allUsers) - set(allIPaddresses))
 
-# getAllUsers = json.loads(unparsed_getAllUsers)
-# print getAllUsers
+# From the IP addresses list, separate out the IP addresses that
+# are private/internal (non-public) into a separate list.
 
-# 1. Requesting login
-# payload = {'action': 'query', 'format': 'json', 'meta': 'tokens', 'type': 'login'}
-# r1 = requests.post(baseurl + 'api.php', data=payload)
+allInternalIPaddresses = []
+for address in allIPaddresses:
+    if (IP(address).iptype()=='PRIVATE'):
+        allInternalIPaddresses.append(address)
 
-# 2. Confirming login
-# login_token = r1.json()['query']['tokens']['logintoken']
-# payload = {'action': 'login', 'format': 'json', 'lgname': username, 'lgpassword': password, 'lgtoken': login_token}
-# r2 = requests.post(baseurl + 'api.php', data=payload, cookies=r1.cookies)
+allPublicIPaddresses = list(set(allIPaddresses) - set(allInternalIPaddresses))
 
-# 3. Get editing token
-# params3 = '?format=json&action=query&meta=tokens&continue='
-# r3 = requests.get(baseurl + 'api.php' + params3, cookies=r2.cookies)
-# edit_token = r3.json()['query']['tokens']['csrftoken']
+# Sort lists
+convertList(allUsers)
+allUsers.sort()
 
-# edit_cookie = r2.cookies.copy()
-# edit_cookie.update(r3.cookies)
+convertList(allPublicIPaddresses)
+sortIPList(allPublicIPaddresses)
 
-# 4. Saving action
-# payload = {'action': 'edit', 'assert': 'user', 'format': 'json', 'appendtext': message,'summary': summary, 'title': title, 'token': edit_token}
-# r4 = requests.post(baseurl + 'api.php', data=payload, cookies=edit_cookie)
+convertList(allInternalIPaddresses)
+sortIPList(allInternalIPaddresses)
 
-# 5. Final output
-# print (r4.text)
+# Print all registered users
+print "All users:"
+for user in allUsers:
+    print "User:" + user
+print
+
+# Geolocation and printing of public IP addresses
+print "All public IP addresses:"
+reader = geoip2.database.Reader('GeoLite2-City.mmdb')
+for address in allPublicIPaddresses:
+    response = reader.city(address)
+    print address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
+print
+reader.close()
+
+# Printing of internal IP addresses
+print "All internal IP addresses:"
+for address in allInternalIPaddresses:
+    print address
+print
