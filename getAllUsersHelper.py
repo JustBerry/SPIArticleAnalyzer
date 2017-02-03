@@ -1,4 +1,5 @@
 import socket
+import ipaddress
 
 # Helper function: Convert list from unicode to string
 def convertList(list):
@@ -30,8 +31,18 @@ def is_valid_ipv6_address(address):
 
 # Helper function that sorts lists of IP addresses
 def sortIPList(ips):
+    # Convert list of strings into list of IP address objects
+    ipaddress.ip_address('203.59.166.123')
+    listOfIPObjects = []
     for i in range(len(ips)):
-        ips[i] = "%3s.%3s.%3s.%3s" % tuple(ips[i].split("."))
-    ips.sort()
+        print ips[i]
+        listOfIPObjects[i] = ipaddress.ip_address(ips[i])
+    sorted(listOfIPObjects)
     for i in range(len(ips)):
-        ips[i] = ips[i].replace(" ", "")
+        ips[i] = str(listOfIPObjects[i])
+
+    # for i in range(len(ips)):
+    #     ips[i] = "%3s.%3s.%3s.%3s" % tuple(ips[i].split("."))
+    # ips.sort()
+    # for i in range(len(ips)):
+    #     ips[i] = ips[i].replace(" ", "")
