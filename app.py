@@ -6,7 +6,7 @@ from builtins import input
 app = Flask(__name__)
 
 # Generate a random secret application key
-# 
+#
 # NOTE: this key changes every invocation. In an actual application, the key
 # should not change! Otherwise you might get a different secret key for
 # different requests, which means you can't read data stored in cookies,
@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 f = open("oauth.txt", "r")
 
-app.secret_key = f.readline()
+app.secret_key = f.readline().splitlines()
 
 print("""
 NOTE: The callback URL you entered when proposing an OAuth consumer
@@ -27,8 +27,8 @@ server. Your redirect back will therefore fail -- please adapt the URL in
 your address bar to http://localhost:5000/oauth-callback?oauth_verifier=...etc
 """)
 
-consumer_key = f.readline()
-consumer_secret = f.readline()
+consumer_key = f.readline().splitlines()
+consumer_secret = f.readline().splitlines()
 
 mwoauth = MWOAuth(consumer_key=consumer_key, consumer_secret=consumer_secret)
 app.register_blueprint(mwoauth.bp)
@@ -40,3 +40,5 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+f.close()
