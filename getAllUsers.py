@@ -63,37 +63,37 @@ sortIPList(allPublicIPaddresses)
 convertList(allInternalIPaddresses)
 sortIPList(allInternalIPaddresses)
 
-# Preparing output
-output = ""
-
-# Adding all registered users to output.
-output += "All users:"
-for user in allUsers:
-    output += "\n"
-    output += "User:" + user
-output += "\n\n"
-
-# Adding geolocation and all public IP addresses to output.
-output += "All public IP addresses:"
-reader = geoip2.database.Reader('GeoLite2-City.mmdb')
-for address in allPublicIPaddresses:
-    response = reader.city(address)
-    output += "\n"
-    output += address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
-output += "\n\n"
-reader.close()
-
-# Printing of internal IP addresses
-output += "All internal IP addresses:"
-for address in allInternalIPaddresses:
-    output += "\n"
-    output += address
-output += "\n\n"
-
 # Flask function: displays output on webpage
 @app.route("/")
-def display(output):
+def display():
+    # Preparing output
+    output = ""
+
+    # Appending all registered users to output.
+    output += "All users:"
+    for user in allUsers:
+        output += "\n"
+        output += "User:" + user
+    output += "\n\n"
+
+    # Appending geolocation and all public IP addresses to output.
+    output += "All public IP addresses:"
+    reader = geoip2.database.Reader('GeoLite2-City.mmdb')
+    for address in allPublicIPaddresses:
+        response = reader.city(address)
+        output += "\n"
+        output += address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
+    output += "\n\n"
+    reader.close()
+
+    # Appending internal IP addresses
+    output += "All internal IP addresses:"
+    for address in allInternalIPaddresses:
+        output += "\n"
+        output += address
+    output += "\n\n"
+
     return output
 
 # Call display function
-display(output)
+display()
