@@ -98,3 +98,5 @@ def display(article_name):
 
 # Call display function
 display(article_name)
+
+print "Finished running getAllUsers.py."
