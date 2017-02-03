@@ -71,28 +71,34 @@ def display(article_name):
     output = ""
 
     # Appending all registered users to output.
-    output += "All users:"
+    if (len(allUsers)!=0):
+        output += "All users:"
     for user in allUsers:
         output += "\n"
         output += "User:" + user
-    output += "\n\n"
+    if (len(allUsers)!=0):
+        output += "\n\n"
 
     # Appending geolocation and all public IP addresses to output.
-    output += "All public IP addresses:"
+    if (len(allPublicIPaddresses)!=0):
+        output += "All public IP addresses:"
     reader = geoip2.database.Reader('GeoLite2-City.mmdb')
     for address in allPublicIPaddresses:
         response = reader.city(address)
         output += "\n"
         output += address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
-    output += "\n\n"
     reader.close()
+    if (len(allPublicIPaddresses)!=0):
+        output += "\n\n"
 
     # Appending internal IP addresses
-    output += "All internal IP addresses:"
+    if (len(allInternalIPaddresses)!=0):
+        output += "All internal IP addresses:"
     for address in allInternalIPaddresses:
         output += "\n"
         output += address
-    output += "\n\n"
+    if (len(allInternalIPaddresses)!=0):
+        output += "\n\n"
 
     print output
 
