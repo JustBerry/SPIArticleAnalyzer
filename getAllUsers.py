@@ -3,6 +3,9 @@ import json
 import geoip2.database
 import getpass
 
+from flask import Flask
+app = Flask(__name__)
+
 from IPy import IP
 from getAllUsersHelper import *
 
@@ -18,12 +21,14 @@ articlename = raw_input('Article to search: ')
 
 requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': articlename, 'rvlimit': 'max'}
 unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
-
 allPages = unparsed_allRevisions.json()['query']['pages']
 allUsers = [];
 for page in allPages:
     for revision in unparsed_allRevisions.json()['query']['pages'][page]['revisions']:
-        allUsers.append(revision['user'])
+        try:
+            allUsers.append(revision['user'])
+        except:
+            pass
 
 # Removing duplicate (non-unique) users
 allUsers = list(set(allUsers))
@@ -58,23 +63,37 @@ sortIPList(allPublicIPaddresses)
 convertList(allInternalIPaddresses)
 sortIPList(allInternalIPaddresses)
 
-# Print all registered users
-print "All users:"
-for user in allUsers:
-    print "User:" + user
-print
+# Preparing output
+output = ""
 
-# Geolocation and printing of public IP addresses
-print "All public IP addresses:"
+# Adding all registered users to output.
+output += "All users:"
+for user in allUsers:
+    output += "\n"
+    output += "User:" + user
+output += "\n\n"
+
+# Adding geolocation and all public IP addresses to output.
+output += "All public IP addresses:"
 reader = geoip2.database.Reader('GeoLite2-City.mmdb')
 for address in allPublicIPaddresses:
     response = reader.city(address)
-    print address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
-print
+    output += "\n"
+    output += address + ' (' + unicode(response.city.name) + ', ' + unicode(response.country.name) + ')'
+output += "\n\n"
 reader.close()
 
 # Printing of internal IP addresses
-print "All internal IP addresses:"
+output += "All internal IP addresses:"
 for address in allInternalIPaddresses:
-    print address
-print
+    output += "\n"
+    output += address
+output += "\n\n"
+
+# Flask function: displays output on webpage
+@app.route("/")
+def display(output):
+    return output
+
+# Call display function
+display(output)
