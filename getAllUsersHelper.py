@@ -32,17 +32,16 @@ def is_valid_ipv6_address(address):
 # Helper function that sorts lists of IP addresses
 def sortIPList(ips):
     # Convert list of strings into list of IP address objects
-    ipaddress.ip_address('203.59.166.123')
-    listOfIPObjects = []
+    listOfIPv4Objects = []
+    listOfIPv6Objects = []
     for i in range(len(ips)):
-        print ips[i]
-        listOfIPObjects[i] = ipaddress.ip_address(ips[i])
-    sorted(listOfIPObjects)
-    for i in range(len(ips)):
-        ips[i] = str(listOfIPObjects[i])
-
-    # for i in range(len(ips)):
-    #     ips[i] = "%3s.%3s.%3s.%3s" % tuple(ips[i].split("."))
-    # ips.sort()
-    # for i in range(len(ips)):
-    #     ips[i] = ips[i].replace(" ", "")
+        if (is_valid_ipv4_address(ips[i])):
+            listOfIPv4Objects.append(ipaddress.ip_address(unicode(ips[i])))
+        else:
+            listOfIPv6Objects.append(ipaddress.ip_address(unicode(ips[i])))
+    listOfIPv4Objects = sorted(listOfIPv4Objects)
+    listOfIPv6Objects = sorted(listOfIPv6Objects)
+    for j in range(len(listOfIPv4Objects)):
+        ips[j] = str(listOfIPv4Objects[j])
+    for k in range(len(listOfIPv6Objects)):
+        ips[len(listOfIPv4Objects)+k] = str(listOfIPv6Objects[k])
