@@ -1,2 +1,4 @@
 
 getAllUsersStorage.py
+
+*.pyc
