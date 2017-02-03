@@ -14,58 +14,60 @@ from getAllUsersHelper import *
 # pip install geoip2
 # Put IPy.py in the same directory
 
-baseurl = 'https://en.wikipedia.org/w/'
-articlename = raw_input('Article to search: ')
-
-# Requesting all users that have edited a particular page.
-
-requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': articlename, 'rvlimit': 'max'}
-unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
-allPages = unparsed_allRevisions.json()['query']['pages']
-allUsers = [];
-for page in allPages:
-    for revision in unparsed_allRevisions.json()['query']['pages'][page]['revisions']:
-        try:
-            allUsers.append(revision['user'])
-        except:
-            pass
-
-# Removing duplicate (non-unique) users
-allUsers = list(set(allUsers))
-
-# From list of all users (allUsers) that have edited the specified article (articlename),
-# isolate a list of valid IP addresses (consisting of IPv4 and IPv6 addresses).
-
-allIPaddresses = []
-for user in allUsers:
-    if (is_valid_ipv4_address(user) or is_valid_ipv6_address(user)):
-        allIPaddresses.append(user)
-
-allUsers = list(set(allUsers) - set(allIPaddresses))
-
-# From the IP addresses list, separate out the IP addresses that
-# are private/internal (non-public) into a separate list.
-
-allInternalIPaddresses = []
-for address in allIPaddresses:
-    if (IP(address).iptype()=='PRIVATE'):
-        allInternalIPaddresses.append(address)
-
-allPublicIPaddresses = list(set(allIPaddresses) - set(allInternalIPaddresses))
-
-# Sort lists
-convertList(allUsers)
-allUsers.sort()
-
-convertList(allPublicIPaddresses)
-sortIPList(allPublicIPaddresses)
-
-convertList(allInternalIPaddresses)
-sortIPList(allInternalIPaddresses)
 
 # Flask function: displays output on webpage
-@app.route("/")
-def display():
+@app.route("/<article_name>")
+def display(article_name):
+
+    baseurl = 'https://en.wikipedia.org/w/'
+    article_name = raw_input('Article to search: ')
+
+    # Requesting all users that have edited a particular page.
+
+    requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': article_name, 'rvlimit': 'max'}
+    unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
+    allPages = unparsed_allRevisions.json()['query']['pages']
+    allUsers = [];
+    for page in allPages:
+        for revision in unparsed_allRevisions.json()['query']['pages'][page]['revisions']:
+            try:
+                allUsers.append(revision['user'])
+            except:
+                pass
+
+    # Removing duplicate (non-unique) users
+    allUsers = list(set(allUsers))
+
+    # From list of all users (allUsers) that have edited the specified article (article_name),
+    # isolate a list of valid IP addresses (consisting of IPv4 and IPv6 addresses).
+
+    allIPaddresses = []
+    for user in allUsers:
+        if (is_valid_ipv4_address(user) or is_valid_ipv6_address(user)):
+            allIPaddresses.append(user)
+
+    allUsers = list(set(allUsers) - set(allIPaddresses))
+
+    # From the IP addresses list, separate out the IP addresses that
+    # are private/internal (non-public) into a separate list.
+
+    allInternalIPaddresses = []
+    for address in allIPaddresses:
+        if (IP(address).iptype()=='PRIVATE'):
+            allInternalIPaddresses.append(address)
+
+    allPublicIPaddresses = list(set(allIPaddresses) - set(allInternalIPaddresses))
+
+    # Sort lists
+    convertList(allUsers)
+    allUsers.sort()
+
+    convertList(allPublicIPaddresses)
+    sortIPList(allPublicIPaddresses)
+
+    convertList(allInternalIPaddresses)
+    sortIPList(allInternalIPaddresses)
+
     # Preparing output
     output = ""
 
