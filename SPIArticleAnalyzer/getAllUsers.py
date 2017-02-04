@@ -4,7 +4,6 @@ import geoip2.database
 import getpass
 
 from flask import Flask
-app = Flask(__name__)
 
 from IPy import IP
 from getAllUsersHelper import *
