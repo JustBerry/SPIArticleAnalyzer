@@ -5,7 +5,7 @@ from builtins import input
 
 import sys
 import os
-sys.path.expanduser("/SPIArticleAnalyzer")
+os.path.expanduser("/SPIArticleAnalyzer")
 from getAllUsers import *
 
 # Generate a random secret application key
