@@ -2,3 +2,7 @@
 getAllUsersStorage.py
 
 *.pyc
+
+SPIArticleAnalyzer/.DS_Store
+
+.DS_Store
