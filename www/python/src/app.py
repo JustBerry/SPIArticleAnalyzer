@@ -3,7 +3,10 @@ from flask import Flask
 from flask_mwoauth import MWOAuth
 from builtins import input
 
-import ~/SPIArticleAnalyzer/getAllUsers.py
+import sys
+import os
+sys.path.expanduser("/SPIArticleAnalyzer")
+from getAllUsers import *
 
 # Generate a random secret application key
 #
