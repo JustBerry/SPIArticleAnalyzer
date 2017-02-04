@@ -3,8 +3,8 @@ import json
 import geoip2.database
 import getpass
 
-# from flask import Flask
-# app = Flask(__name__)
+from flask import Flask
+app = Flask(__name__)
 
 from IPy import IP
 from getAllUsersHelper import *
@@ -18,7 +18,7 @@ baseurl = 'https://en.wikipedia.org/w/'
 article_name = raw_input('Article to search: ')
 
 # Flask function: displays output on webpage
-# @app.route("/<article_name>")
+@app.route("/<article_name>")
 def display(article_name):
 
     # Requesting all users that have edited a particular page.
@@ -100,7 +100,7 @@ def display(article_name):
     if (len(allInternalIPaddresses)!=0):
         output += "\n\n"
 
-    print output
+    return output
 
 # Call display function
 display(article_name)
