@@ -36,9 +36,9 @@ def sortIPList(ips):
     listOfIPv6Objects = []
     for i in range(len(ips)):
         if (is_valid_ipv4_address(ips[i])):
-            listOfIPv4Objects.append(ipaddress.ip_address(unicode(ips[i])))
+            listOfIPv4Objects.append(ipaddress.ip_address(ips[i]))
         else:
-            listOfIPv6Objects.append(ipaddress.ip_address(unicode(ips[i])))
+            listOfIPv6Objects.append(ipaddress.ip_address(ips[i]))
     listOfIPv4Objects = sorted(listOfIPv4Objects)
     listOfIPv6Objects = sorted(listOfIPv6Objects)
     for j in range(len(listOfIPv4Objects)):
