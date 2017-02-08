@@ -21,8 +21,8 @@ import flask
 import mwoauth
 import os
 import yaml
-from getAllUsers.py import *
 
+from getAllUsers import *
 
 app = flask.Flask(__name__)
 
