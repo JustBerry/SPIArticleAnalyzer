@@ -40,7 +40,7 @@ def index():
     return flask.render_template(
         'index.html', username=username, greeting=greeting)
 
-@app.route('search')
+@app.route('/search')
 def search():
     article_name = 'Main Page'
     return getAllUsers(article_name)
