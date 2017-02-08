@@ -20,7 +20,14 @@ def getAllUsers(article_name):
 
     requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': article_name, 'rvlimit': 'max'}
     unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
-    allPages = unparsed_allRevisions.json()['query']['pages']
+    revisionsDictionary = unparsed_allRevisions.json()
+    if ('query' not in revisionsDictionary.keys()):
+        return "Query: "  + unparsed_allRevisions.text
+        # return "This page does not exist. Please try again."
+    if ('pages' not in revisionsDictionary['query'].keys()):
+        return "Pages: "  + unparsed_allRevisions.text
+        # return "There are no pages for this query. Please try again."
+    allPages = revisionsDictionary['query']['pages']
     allUsers = [];
     for page in allPages:
         for revision in unparsed_allRevisions.json()['query']['pages'][page]['revisions']:
