@@ -4,3 +4,4 @@ SPIArticleAnalyzer/.DS_Store
 .DS_Store
 .idea/*
 SPIArticleAnalyzer/config.yaml
+venv/*
