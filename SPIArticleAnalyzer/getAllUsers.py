@@ -3,9 +3,6 @@ import json
 import geoip2.database
 import getpass
 
-from flask import Flask
-app = Flask(__name__)
-
 from IPy import IP
 from getAllUsersHelper import *
 
@@ -14,12 +11,10 @@ from getAllUsersHelper import *
 # pip install geoip2
 # Put IPy.py in the same directory
 
-baseurl = 'https://en.wikipedia.org/w/'
-article_name = raw_input('Article to search: ')
+# Returns string output of report
+def getAllUsers(article_name):
 
-# Flask function: displays output on webpage
-@app.route("/<article_name>")
-def display(article_name):
+    baseurl = 'https://en.wikipedia.org/w/'
 
     # Requesting all users that have edited a particular page.
 
@@ -101,8 +96,3 @@ def display(article_name):
         output += "\n\n"
 
     return output
-
-# Call display function
-display(article_name)
-
-print "Finished running getAllUsers.py."

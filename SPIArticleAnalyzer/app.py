@@ -21,6 +21,7 @@ import flask
 import mwoauth
 import os
 import yaml
+from getAllUsers.py import *
 
 
 app = flask.Flask(__name__)
@@ -39,11 +40,16 @@ def index():
     return flask.render_template(
         'index.html', username=username, greeting=greeting)
 
+@app.route('search')
+def search():
+    article_name = 'Main Page'
+    return getAllUsers(article_name)
+
 
 @app.route('/login')
 def login():
     """Initiate an OAuth login.
-	
+
     Call the MediaWiki server to get request secrets and then redirect the
     user to the MediaWiki server to sign the request.
     """
@@ -79,10 +85,10 @@ def oauth_callback():
             flask.request.query_string)
 
         identity = mwoauth.identify(
-            app.config['OAUTH_MWURI'], consumer_token, access_token)	
+            app.config['OAUTH_MWURI'], consumer_token, access_token)
     except Exception:
         app.logger.exception('OAuth autnetication failed')
-	
+
     else:
         flask.session['access_token'] = dict(zip(
             access_token._fields, access_token))
