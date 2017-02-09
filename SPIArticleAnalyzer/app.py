@@ -55,14 +55,10 @@ def index():
 
 @app.route('/search', methods=['GET', 'POST'], endpoint='search_home')
 def search_home():
-    print "Stop: 1"
     form = ArticleForm(flask.request.form)
-    print "Stop: 2"
     articlename = form.article_name.data
     if ((flask.request.method == 'POST' and form.validate()) and (articlename is not None)):
-        print "Article name: " + articlename
         return flask.redirect(flask.url_for('search', article_name=articlename))
-    print "Stop: 3"
     return flask.render_template('search.html', form=form)
 
 @app.route('/search/<article_name>', methods=['GET', 'POST'])
