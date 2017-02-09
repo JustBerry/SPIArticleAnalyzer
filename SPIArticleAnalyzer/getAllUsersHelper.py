@@ -27,6 +27,8 @@ def is_valid_ipv6_address(address):
         socket.inet_pton(socket.AF_INET6, address)
     except socket.error:  # not a valid address
         return False
+    except AttributeError:
+        return False
     return True
 
 # Helper function that sorts lists of IP addresses

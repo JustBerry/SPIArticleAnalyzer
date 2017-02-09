@@ -63,10 +63,7 @@ def getAllUsers(article_name):
     convertList(allUsers)
     allUsers.sort()
 
-    convertList(allPublicIPaddresses)
     sortIPList(allPublicIPaddresses)
-
-    convertList(allInternalIPaddresses)
     sortIPList(allInternalIPaddresses)
 
     # Preparing output
