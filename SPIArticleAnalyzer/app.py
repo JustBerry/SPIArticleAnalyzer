@@ -24,6 +24,11 @@ import yaml
 
 from getAllUsers import *
 
+from wtforms import Form, StringField, validators
+from wtforms.validators import DataRequired
+
+
+# Initialize Flask app
 app = flask.Flask(__name__)
 
 
@@ -33,6 +38,10 @@ app.config.update(
     yaml.load(open(os.path.join(__dir__, 'config.yaml'))))
 
 
+
+class ArticleForm(Form):
+  article_name = StringField('Article Name', [validators.DataRequired()])
+
 @app.route('/')
 def index():
     greeting = app.config['GREETING']
@@ -40,11 +49,25 @@ def index():
     return flask.render_template(
         'index.html', username=username, greeting=greeting)
 
-@app.route('/search')
-def search():
-    article_name = 'Main Page'
-    return getAllUsers(article_name)
+# @app.route('/search')
+# def searchNone():
+#     return flask.redirect(flask.url_for('search'))
 
+@app.route('/search', methods=['GET', 'POST'], endpoint='search_home')
+def search_home():
+    print "Stop: 1"
+    form = ArticleForm(flask.request.form)
+    print "Stop: 2"
+    articlename = form.article_name.data
+    if ((flask.request.method == 'POST' and form.validate()) and (articlename is not None)):
+        print "Article name: " + articlename
+        return flask.redirect(flask.url_for('search', article_name=articlename))
+    print "Stop: 3"
+    return flask.render_template('search.html', form=form)
+
+@app.route('/search/<article_name>', methods=['GET', 'POST'])
+def search(article_name):
+    return getAllUsers(article_name)
 
 @app.route('/login')
 def login():
@@ -102,3 +125,6 @@ def logout():
     """Log the user out by clearing their session."""
     flask.session.clear()
     return flask.redirect(flask.url_for('index'))
+
+if __name__ == "__main__":
+    app.run()
