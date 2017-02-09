@@ -5,3 +5,5 @@ SPIArticleAnalyzer/.DS_Store
 .idea/*
 SPIArticleAnalyzer/config.yaml
 venv/*
+
+SPIArticleAnalyzer/image.png
