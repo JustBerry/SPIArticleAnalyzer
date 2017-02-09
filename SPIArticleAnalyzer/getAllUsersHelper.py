@@ -1,22 +1,25 @@
 import socket
 import ipaddress
+import icu  # pip install PyICU
 
 # Helper function: Convert list from unicode to string
-def convertList(list):
-    for i in range(len(list)):
-        list[i] = str(list[i])
+def sortNonIPList(list):
+    collator = icu.Collator.createInstance(icu.Locale('de_DE.UTF-8'))
+    list = sorted(list, key=collator.getSortKey)
 
 # Helper function: Validate IPv4 address
 def is_valid_ipv4_address(address):
     try:
-        socket.inet_pton(socket.AF_INET, address)
+        socket.inet_pton(socket.AF_INET, address.encode('utf-8'))
     except AttributeError:  # no inet_pton here, sorry
         try:
-            socket.inet_aton(address)
+            socket.inet_aton(address.encode('utf-8'))
         except socket.error:
             return False
         return address.count('.') == 3
     except socket.error:  # not a valid address
+        return False
+    except UnicodeEncodeError:
         return False
 
     return True
@@ -24,10 +27,12 @@ def is_valid_ipv4_address(address):
 # Helper function: Validate IPv6 address
 def is_valid_ipv6_address(address):
     try:
-        socket.inet_pton(socket.AF_INET6, address)
+        socket.inet_pton(socket.AF_INET6, address.encode('utf-8'))
+    except AttributeError:
+        return False
     except socket.error:  # not a valid address
         return False
-    except AttributeError:
+    except UnicodeEncodeError:
         return False
     return True
 
