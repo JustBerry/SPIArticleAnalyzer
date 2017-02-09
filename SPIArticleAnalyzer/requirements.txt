@@ -3,3 +3,7 @@ geoip2
 pyyaml
 mwoauth
 wtforms
+numpy
+matplotlib
+basemap
+image
