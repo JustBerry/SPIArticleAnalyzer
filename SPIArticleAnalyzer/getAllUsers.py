@@ -64,6 +64,7 @@ def getAllUsers(article_name):
     allUsers.sort()
 
     sortIPList(allPublicIPaddresses)
+
     sortIPList(allInternalIPaddresses)
 
     # Preparing output
@@ -85,10 +86,15 @@ def getAllUsers(article_name):
     for address in allPublicIPaddresses:
         response = reader.city(address)
         output += "<br/>"
-        if (response.city.name is not None and response.country.name is not None):
-            output += address + ' (' + response.city.name + ', ' + response.country.name + ')'
-        else:
-            output += address
+        output += address + ' ('
+        if (response.city.name is not None):
+             output += response.city.name
+             output += ', '
+        if (response.subdivisions.most_specific.name is not None):
+            output += response.subdivisions.most_specific.name
+            output += ', '
+        if (response.country.name is not None):
+            output += response.country.name + ')'
     reader.close()
     if (len(allPublicIPaddresses)!=0):
         output += "<br/><br/>"
