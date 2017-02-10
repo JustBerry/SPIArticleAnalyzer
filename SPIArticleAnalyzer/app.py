@@ -44,10 +44,11 @@ class ArticleForm(Form):
 
 @app.route('/')
 def index():
-    greeting = app.config['GREETING']
-    username = flask.session.get('username', None)
-    return flask.render_template(
-        'index.html', username=username, greeting=greeting)
+    return flask.redirect(flask.url_for('search_home'))
+    # greeting = app.config['GREETING']
+    # username = flask.session.get('username', None)
+    # return flask.render_template(
+    #     'index.html', username=username, greeting=greeting)
 
 # @app.route('/search')
 # def searchNone():
