@@ -1,9 +1,12 @@
-getAllUsersStorage.py
+# Ignoring compilation and temporary system files.
 *.pyc
-SPIArticleAnalyzer/.DS_Store
-.DS_Store
-.idea/*
-SPIArticleAnalyzer/config.yaml
+*.DS_Store
+
+# Ignoring virtual environment directory and files within.
 venv/*
 
-SPIArticleAnalyzer/image.png
+# Ignoring private files.
+SPIArticleAnalyzer/config.yaml
+
+# Ignoring local code storage for code not being currently used
+CodeStorage/*
