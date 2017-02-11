@@ -1,7 +1,59 @@
+<html>
+<head>
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.anfield {
+    background-color: #EDF7EE; /* Faded Green */
+    border: none;
+    color: black;
+    padding: 8px 16px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+}
+</style>
+</head>
+
+<body>
+
+See a bug? Something not working or loading properly?
+Report at <a href="https://github.com/JustBerry/SPIArticleAnalyzer/issues/new">
+https://github.com/JustBerry/SPIArticleAnalyzer/issues/new</a>. <br/><br/>
+
+<center>
 {% from "_formhelpers.html" import render_field %}
 <form method=post>
-  <dl>
-    {{ render_field(form.article_name) }}
-  </dl>
-  <p><input type=submit value="Get SPI Report!">
+  {{ render_field(form.article_name, placeholder="Article Title", class="anfield") }}
+  <br/>
+  <button type=submit class="button button1">Get SPI Report</button>
 </form>
+</center>
+
+</body>
+
+</html>
