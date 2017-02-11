@@ -74,7 +74,7 @@ def getAllUsers(article_name):
         output += "<br/><br/>"
 
     # Appending geolocation and all public IP addresses to output.
-    if (len(allPublicIPaddresses)!=0):
+    if (allPublicIPaddresses is not None and len(allPublicIPaddresses)!=0):
         output += "All public IP addresses:"
         reader = geoip2.database.Reader('GeoLite2-City.mmdb')
         for address in allPublicIPaddresses:
@@ -93,7 +93,7 @@ def getAllUsers(article_name):
         output += "<br/><br/>"
 
     # Appending internal IP addresses
-    if (len(allInternalIPaddresses)!=0):
+    if (allInternalIPaddresses is not None and len(allInternalIPaddresses)!=0):
         output += "All internal IP addresses:"
         for address in allInternalIPaddresses:
             output += "<br/>"
