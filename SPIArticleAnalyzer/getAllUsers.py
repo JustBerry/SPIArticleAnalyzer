@@ -56,7 +56,7 @@ def getAllUsers(article_name):
     allPublicIPaddresses = list(set(allIPaddresses) - set(allInternalIPaddresses))
 
     # Sort lists
-    sortNonIPList(allUsers)
+    allUsers = sortNonIPList(allUsers)
 
     sortIPList(allPublicIPaddresses)
 
@@ -66,41 +66,38 @@ def getAllUsers(article_name):
     output = ""
 
     # Appending all registered users to output.
-    if (len(allUsers)!=0):
+    if (allUsers is not None and len(allUsers)!=0):
         output += "All users:"
-    for user in allUsers:
-        output += "<br/>"
-        output += "User:" + user
-    if (len(allUsers)!=0):
+        for user in allUsers:
+            output += "<br/>"
+            output += "User:" + user
         output += "<br/><br/>"
 
     # Appending geolocation and all public IP addresses to output.
     if (len(allPublicIPaddresses)!=0):
         output += "All public IP addresses:"
-    reader = geoip2.database.Reader('GeoLite2-City.mmdb')
-    for address in allPublicIPaddresses:
-        response = reader.city(address)
-        output += "<br/>"
-        output += address + ' ('
-        if (response.city.name is not None):
-             output += response.city.name
-             output += ', '
-        if (response.subdivisions.most_specific.name is not None):
-            output += response.subdivisions.most_specific.name
-            output += ', '
-        if (response.country.name is not None):
-            output += response.country.name + ')'
-    reader.close()
-    if (len(allPublicIPaddresses)!=0):
+        reader = geoip2.database.Reader('GeoLite2-City.mmdb')
+        for address in allPublicIPaddresses:
+            response = reader.city(address)
+            output += "<br/>"
+            output += address + ' ('
+            if (response.city.name is not None):
+                output += response.city.name
+                output += ', '
+            if (response.subdivisions.most_specific.name is not None):
+                output += response.subdivisions.most_specific.name
+                output += ', '
+            if (response.country.name is not None):
+                output += response.country.name + ')'
+        reader.close()
         output += "<br/><br/>"
 
     # Appending internal IP addresses
     if (len(allInternalIPaddresses)!=0):
         output += "All internal IP addresses:"
-    for address in allInternalIPaddresses:
-        output += "<br/>"
-        output += address
-    if (len(allInternalIPaddresses)!=0):
+        for address in allInternalIPaddresses:
+            output += "<br/>"
+            output += address
         output += "<br/><br/>"
 
     return output
