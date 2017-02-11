@@ -3,42 +3,9 @@ from __future__ import print_function, unicode_literals, with_statement
 import requests
 import json
 import geoip2.database
-import getpass
 
 from IPy import IP
 from getAllUsersHelper import *
-
-import matplotlib
-
-import argparse
-import contextlib
-import sys
-import csv
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
-
-# Installation
-# Install pip
-# pip install geoip2
-# Put IPy.py in the same directory
-
-# def get_lat_lon(ip_list=[], lats=[], lons=[]):
-#     """
-#     This function connects to the FreeGeoIP web service to get info from
-#     a list of IP addresses.
-#     Returns two lists (latitude and longitude).
-#     """
-#     print("Processing {} IPs...".format(len(ip_list)))
-#     for ip in ip_list:
-#         r = requests.get("https://freegeoip.net/json/" + ip)
-#         json_response = r.json()
-#         print("{ip}, {region_name}, {country_name}, {latitude}, {longitude}".format(**json_response))
-#         if json_response['latitude'] and json_response['longitude']:
-#             lats.append(json_response['latitude'])
-#             lons.append(json_response['longitude'])
-#     return lats, lons
 
 # Returns string output of report
 def getAllUsers(article_name):
@@ -136,51 +103,4 @@ def getAllUsers(article_name):
     if (len(allInternalIPaddresses)!=0):
         output += "<br/><br/>"
 
-    print ("All public IPs: ")
-    print (allPublicIPaddresses)
-    lats = []
-    lons = []
-    cannotGeolocateIPaddresses = []
-    wesn = None
-    for address in allPublicIPaddresses:
-        reader = geoip2.database.Reader('GeoLite2-City.mmdb')
-        response = reader.city(address)
-        if (response.location.latitude is not None and response.location.longitude is not None):
-            lats.append(response.location.latitude)
-            lons.append(response.location.longitude)
-        else:
-            cannotGeolocateIPaddresses.append(address)
-
-    print ("Lats before: ")
-    print (lats)
-    print ("Lons before: ")
-    print (lons)
-    print (cannotGeolocateIPaddresses)
-    # get_lat_lon(cannotGeolocateIPaddresses, lats, lons)
-    # print ("Lats after: ")
-    # print (lats)
-    # print ("Lons after: ")
-    # print (lons)
-
-    output = 'image.png'
-    # def generate_map(output, lats=[], lons=[], wesn=None):
-    """
-    Using Basemap and the matplotlib toolkit, this function generates a map and
-    puts a red dot at the location of every IP addresses found in the list.
-    The map is then saved in the file specified in `output`.
-    """
-    print("Generating map and saving it to {}".format(output))
-    if wesn:
-        wesn = [float(i) for i in wesn.split('/')]
-        m = Basemap(projection='cyl', resolution='l',
-                llcrnrlon=wesn[0], llcrnrlat=wesn[2],
-                urcrnrlon=wesn[1], urcrnrlat=wesn[3])
-    else:
-        m = Basemap(projection='cyl', resolution='l')
-    m.bluemarble()
-    x, y = m(lons, lats)
-    m.scatter(x, y, s=1, color='#ff0000', marker='o', alpha=0.3)
-    plt.savefig(output, dpi=600, bbox_inches='tight')
-
-    output += '<img src="image.png">'
     return output
