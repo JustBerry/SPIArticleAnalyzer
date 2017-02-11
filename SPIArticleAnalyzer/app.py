@@ -62,7 +62,7 @@ def search_home():
         return flask.redirect(flask.url_for('search', article_name=articlename))
     return flask.render_template('search.html', form=form)
 
-@app.route('/search/<article_name>', methods=['GET', 'POST'])
+@app.route('/search/<path:article_name>', methods=['GET', 'POST'])
 def search(article_name):
     return getAllUsers(article_name)
 
