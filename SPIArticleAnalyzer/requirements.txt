@@ -5,6 +5,6 @@ mwoauth
 wtforms
 numpy
 matplotlib
-basemap
-image
-icu
+setuptools
+requests
+pyicu
