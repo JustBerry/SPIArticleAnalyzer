@@ -6,6 +6,7 @@ import icu  # pip install PyICU
 def sortNonIPList(list):
     collator = icu.Collator.createInstance(icu.Locale('de_DE.UTF-8'))
     list = sorted(list, key=collator.getSortKey)
+    return list
 
 # Helper function: Validate IPv4 address
 def is_valid_ipv4_address(address):
