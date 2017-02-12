@@ -7,22 +7,22 @@ import geoip2.database
 from IPy import IP
 from getAllUsersHelper import *
 
+def getAllRevisions(article_name):
+    baseurl = 'https://en.wikipedia.org/w/'
+    requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': article_name, 'rvlimit': 'max'}
+    return requests.get(baseurl + 'api.php', params=requestParameters)
+
 # Returns string output of report
 def getAllUsers(article_name):
-
-    baseurl = 'https://en.wikipedia.org/w/'
-
-    # Requesting all users that have edited a particular page.
-
-    requestParameters = {'action': 'query', 'format': 'json', 'prop': 'revisions', 'titles': article_name, 'rvlimit': 'max'}
-    unparsed_allRevisions=requests.get(baseurl + 'api.php', params=requestParameters)
+    unparsed_allRevisions = getAllRevisions(article_name)
     revisionsDictionary = unparsed_allRevisions.json()
+    unexpectedErrorMessage = "Unexpected error. Please create an issue on GitHub with what you inputted for the search fields."
     if ('query' not in revisionsDictionary.keys()):
-        return "Query: "  + unparsed_allRevisions.text
-        # return "This page does not exist. Please try again."
+        return unexpectedErrorMessage
     if ('pages' not in revisionsDictionary['query'].keys()):
-        return "Pages: "  + unparsed_allRevisions.text
-        # return "There are no pages for this query. Please try again."
+        return unexpectedErrorMessage
+    if ('-1' in revisionsDictionary['query']['pages'].keys()):
+        return "Wikipedia does not appear to have an article with this exact name. If it does, please create an issue on GitHub with the article name."
     allPages = revisionsDictionary['query']['pages']
     allUsers = [];
     for page in allPages:
