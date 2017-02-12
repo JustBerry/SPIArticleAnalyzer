@@ -64,7 +64,7 @@ def search_home():
 
 @app.route('/search/<path:article_name>', methods=['GET', 'POST'])
 def search(article_name):
-    return getAllUsers(article_name)
+    return flask.render_template('searchresult.html', output=getAllUsers(article_name).split("\n"))
 
 @app.route('/login')
 def login():
